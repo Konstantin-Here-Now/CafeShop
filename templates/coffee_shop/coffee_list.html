@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Каталог напитков
+{% endblock %}
+
+{% block content %}
+    <div style="text-align:center">
+        <h1 style="font-style: italic;">Каталог напитков</h1>
+        {% if perms.coffee_shop.add_coffee %}
+            <a class="btn btn-success" href="{% url 'coffee_add' %}">Добавить кофе</a>
+        {% endif %}
+        <br><br>
+        <div>
+            {% for item in page_obj.object_list %}
+                <div class="card"
+                     style="width: 18rem;height:30rem;display:inline-block;vertical-align:top;background-color: antiquewhite;">
+                    <div style="vertical-align: top;">
+                        <div class="card-body">
+                            <h5 class="card-title" style="margin-bottom:50px;">{{ item.name }}</h5>
+                            {% if item.photo %}
+                                <img src="{{ item.photo.url }}" class="card-img-top" alt="...">
+                            {% else %}
+                                <img src="{% static "coffee_shop/image/test_foto.png" %}" class="card-img-top"
+                                     alt="..." height=200px>
+                            {% endif %}
+                            <p class="card-text" style="margin-top:30px;">{{ item.price }} руб.</p>
+                        </div>
+                        <a class="btn btn-primary" href="{{ item.get_absolute_url }}" style="margin-top:50px;">Подробнее</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+            <div class="container" style="padding: 10px;margin-top: 30px">
+                <div class="row align-items-center">
+                    <nav aria-label="Page navigation example" class="nav justify-content-center">
+                        <ul class="pagination" style="margin: auto">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page in page_obj.paginator.page_range %}
+                                {% if page_obj.number == page %}
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link" href="#">{{ page }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                                       aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ one_coffee.name }}
+{% endblock %}
+
+{% block content %}
+    <div style="text-align:center; margin-top: 20px;">
+        <div class="card" style="width: 30rem;height:48rem;display:inline-block;vertical-align: top;background-color: antiquewhite;">
+            <div style="vertical-align: top;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ one_coffee.name }}</h5>
+                    <p>{{ one_coffee.description }}</p>
+                    <p>Цена: {{ one_coffee.price }} рублей</p>
+                    {% if one_coffee.photo %}
+                        <img src="{{ one_coffee.photo.url }}" class="card-img-top" alt="...">
+                    {% else %}
+                        <img src="{% static "coffee_shop/image/test_foto.png" %}" class="card-img-top" alt="...">
+                    {% endif %}
+                    <p class="card-text">{{ item.price }}</p>
+                </div>
+            </div>
+            {% if request.user.is_anonymous %}
+                <div class="container">
+                    <p>Войдите в аккаунт, чтобы добавлять товар в корзину</p>
+                    <form method="post" action="{% url 'add_basket_prod' one_coffee.pk %} " style="margin-bottom: 5px">
+                        {% csrf_token %}
+                        {{ basket_form }}
+                        <input type="submit" class="btn btn-success" value="Добавить в корзину" disabled>
+                    </form>
+                </div>
+            {% else %}
+                <div class="container">
+                    <form method="post" action="{% url 'add_basket_prod' one_coffee.pk %} " style="margin-bottom: 5px">
+                        {% csrf_token %}
+                        {{ basket_form }}
+                        <input type="submit" class="btn btn-success" value="Добавить в корзину">
+                    </form>
+                </div>
+            {% endif %}
+            {% if perms.coffee_shop.change_coffee %}
+                <a href="{% url 'coffee_edit' object.pk %}" class="btn btn-warning"
+                   style="margin-bottom: 5px">Редактировать</a>
+            {% endif %}
+            {% if perms.coffee_shop.delete_coffee %}
+                <form method="post" action="{% url 'coffee_del' object.pk %}" style="margin-bottom: 5px">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-danger" value="Удалить">
+                </form>
+            {% endif %}
+            <a href="{% url 'coffee_list' %}" class="btn btn-secondary">Назад</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Заказ в обработке
+{% endblock %}
+
+{% block content %}
+    <div style="text-align:center; margin-top: 150px;">
+        <h1>Ваш заказ передан в кофейню, ожидайте!</h1> <br><br><br>
+        <h2>Номер заказа: {{ cheque.number }}</h2>
+        <div>
+            <a class="btn btn-primary" href="{% url 'coffee_list' %}">Перейти в каталог</a>
+        </div>
+    </div>
+{% endblock %}

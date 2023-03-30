@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Добавление напитка
+{% endblock %}
+
+{% block content %}
+    <div class="container" style="border: 5px solid darkslategrey;margin: auto;width: 50%;padding: 10px;">
+        <div>
+            <form method="post" enctype="multipart/form-data" class="row" style="margin: auto">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input class="btn btn-success" type="submit" value="Добавить напиток" style="margin-top: 20px">
+            </form>
+            <br>
+            <div style="text-align: center">
+                <a class="btn btn-success col-sm-4" href="{% url 'coffee_list' %}">Назад</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Корзина
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 style="font-style: italic;margin-bottom:40px">Корзина</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Фрукт</th>
+                <th scope="col">Цена за шт.</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Общая цена</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in basket %}
+                {% with product_obj=item.coffee %}
+                    <tr>
+                        <td>
+                            <a class="btn btn-info"
+                               href="{% url 'coffee_info' product_obj.pk %}">{{ product_obj.name }}</a>
+                        </td>
+                        <td style="vertical-align: center">
+                            {{ item.price_prod }} руб.
+                        </td>
+                        <td>
+                            {{ item.count_prod }}
+                        </td>
+                        <td>
+                            {{ item.total_price }} руб.
+                        </td>
+                        <td>
+                            <a class="btn btn-secondary"
+                               href="{% url 'remove_basket_prod' product_obj.pk %}">Удалить</a>
+                        </td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            <tr>
+                <th>Всего:</th>
+                <td colspan="2"></td>
+                <th>{{ basket.get_total_price }} руб.</th>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align:center; margin-top: 20px;">
+            <a href="{% url 'coffee_list' %}" class="btn btn-success">Посмотреть еще напитки</a>
+            {% if basket.get_total_price != 0 %}
+                <a href="{% url 'clear_basket_prod' %}" class="btn btn-danger">Очистить</a>
+                <a href="{% url 'basket_success' %}" class="btn btn-warning">Оформить заказ</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

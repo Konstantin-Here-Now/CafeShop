@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Изменение напитка
+{% endblock %}
+
+{% block content %}
+    <div class="container text-center">
+        <div class="row align-items-center">
+            <div class="col">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        {% if field.name != 'exist' %}
+                            <label class='floatingInput' style="font-size: 30px"
+                                   for="{{ field.name.id_for_label }}">{{ field.label }}</label><br><br>
+                            <div class=" mb-4">
+                                {{ field }}
+                            </div>
+                            {{ field.errors }}
+                        {% else %}
+                            {{ field }}
+                            <label class="form-check-label"
+                                   for="{{ field.name.id_for_label }}">{{ field.label }}</label>
+                            {{ field.errors }}
+                        {% endif %}
+                    {% endfor %}
+                    <br><br>
+                    <input class="btn btn-success" type="submit" value="Изменить напиток">
+                </form>
+                <br>
+                <a class="btn btn-info" href="{{ object.get_absolute_url }}">Назад</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
